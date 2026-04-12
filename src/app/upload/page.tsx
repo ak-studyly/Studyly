@@ -1,8 +1,6 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-"use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Upload, CheckCircle } from "lucide-react";
