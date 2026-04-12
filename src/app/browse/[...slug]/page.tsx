@@ -17,7 +17,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
   // Resolve college from slug
   const { data: colleges } = await supabase
     .from("colleges")
-    .select("id, name, city, state")
+    .select("id, name, city, state, approved, created_at")
     .eq("approved", true);
 
   const college = colleges?.find(
