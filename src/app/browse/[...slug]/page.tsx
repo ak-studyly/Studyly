@@ -22,7 +22,14 @@ export default async function BrowsePage({ params, searchParams }: Props) {
 
   const college = colleges?.find(
     (c) => c.name.toLowerCase().replace(/\s+/g, "-") === collegeSlug
-  );
+  ) as {
+    id: string;
+    name: string;
+    city: string;
+    state: string;
+    approved: boolean;
+    created_at: string;
+  };
   if (!college) return <div className="p-8 text-gray-500">College not found.</div>;
 
   const branch = decodeURIComponent(branchSlug)
