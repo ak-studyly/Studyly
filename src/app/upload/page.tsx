@@ -1,4 +1,7 @@
 "use client";
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Upload, CheckCircle } from "lucide-react";
