@@ -20,15 +20,21 @@ export default async function BrowsePage({ params, searchParams }: Props) {
     .select("id, name, city, state, approved, created_at")
     .eq("approved", true);
 
-  const college = colleges?.find(
+  const found = colleges?.find(
     (c) => c.name.toLowerCase().replace(/\s+/g, "-") === collegeSlug
-  ) as {
-    id: string;
-    name: string;
-    city: string;
-    state: string;
-    approved: boolean;
-    created_at: string;
+  );
+
+  if (!found) {
+    return <div className="p-8 text-gray-500">College not found.</div>;
+  }
+
+  const college = {
+    id: found.id,
+    name: found.name,
+    city: found.city,
+    state: found.state,
+    approved: found.approved,
+    created_at: found.created_at,
   };
   if (!college) return <div className="p-8 text-gray-500">College not found.</div>;
 
