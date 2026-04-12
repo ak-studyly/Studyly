@@ -87,7 +87,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
 
   return (
     <BrowseClient
-      college={college}
+      college={college as any}
       branch={branch}
       year={year}
       section={section ?? null}
