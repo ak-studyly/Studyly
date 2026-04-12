@@ -13,7 +13,7 @@ import { format, parseISO } from "date-fns";
 import type { College, Material, Announcement, ImportantDate } from "@/types";
 
 type Props = {
-  college: College;
+  college: any;
   branch: string;
   year: number;
   section: string | null;
