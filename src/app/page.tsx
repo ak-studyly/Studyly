@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import HomepageClient from "@/components/public/HomepageClient";
