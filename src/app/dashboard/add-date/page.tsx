@@ -1,8 +1,6 @@
-"use client";
+import AddDateClient from "@/components/dashboard/AddDateClient";
+import type { JSX } from "react";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { CalendarPlus, CheckCircle } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { useAuth } from "@/components/layout/AuthProvider";
-import type { DateType } from "@/types";
+export default function AddDatePage(): JSX.Element {
+  return <AddDateClient />;
+}
