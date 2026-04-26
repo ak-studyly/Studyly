@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Megaphone, BookOpen, CalendarDays,
-  Users, CalendarPlus, Activity,
+  Users, CalendarPlus, Activity, MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -14,6 +14,7 @@ type Props = { profile: Profile };
 const NAV = [
   { href: "/dashboard",               label: "dashboard",        icon: LayoutDashboard },
   { href: "/dashboard/announcements", label: "announcements",    icon: Megaphone },
+  { href: "/dashboard/discussions",   label: "discussions",      icon: MessageCircle },
   { href: "/dashboard/materials",     label: "materials",        icon: BookOpen },
   { href: "/dashboard/dates",         label: "important dates",  icon: CalendarDays },
 ];
@@ -30,7 +31,6 @@ export default function DashboardSidebar({ profile }: Props) {
 
   return (
     <aside className="flex flex-col gap-3">
-      {/* Class info */}
       <div className="card p-4">
         <p className="text-xs font-medium text-gray-400 dark:text-gray-600 uppercase tracking-wider mb-3">my class</p>
         <div className="flex flex-col gap-1.5 text-sm text-gray-700 dark:text-gray-300">
@@ -65,7 +65,6 @@ export default function DashboardSidebar({ profile }: Props) {
         </div>
       </div>
 
-      {/* CR tools */}
       {isCR && (
         <div className="card p-4">
           <p className="text-xs font-medium text-gray-400 dark:text-gray-600 uppercase tracking-wider mb-2">cr tools</p>
