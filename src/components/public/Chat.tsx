@@ -203,7 +203,7 @@ export default function Chat({ collegeId, branch, year, section }: Props) {
   }, []);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-180px)] min-h-[500px]">
+    <div className="flex flex-col h-full min-h-[500px]">
 
       {/* Name prompt modal */}
       {showNamePrompt && (
