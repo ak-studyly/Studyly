@@ -11,7 +11,8 @@ import SignInModal from "@/components/ui/SignInModal";
 type NavTab = { label: string; href: string };
 
 const GUEST_TABS: NavTab[] = [
-  { label: "explore", href: "/" },
+  { label: "materials",  href: "/materials" },
+  { label: "classroom",  href: "/classroom" },
 ];
 
 const DASHBOARD_TABS: NavTab[] = [
