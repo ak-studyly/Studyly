@@ -241,6 +241,9 @@ function CRComposer({
   const { profile } = useAuth();
   const supabase = createClient();
   const router = useRouter();
+  const [body, setBody] = useState("");
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [posting, setPosting] = useState(false);
 
   const isCR = profile?.role === "cr" &&
     profile.college_id === collegeId &&
@@ -253,12 +256,6 @@ function CRComposer({
     profile.branch === branch &&
     profile.year === year &&
     profile.section === section;
-
-  if (!isCR && !isAnnouncer) return null;
-
-  const [body, setBody] = useState("");
-  const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [posting, setPosting] = useState(false);
 
   const SOURCE_TAGS = ["Principal", "Dean", "College"];
   const TAG_STYLES: Record<string, string> = {
@@ -285,6 +282,8 @@ function CRComposer({
     router.refresh();
   }
 
+  if (!isCR && !isAnnouncer) return null;
+
   return (
     <div className="card p-4 border-brand-mid dark:border-brand-mid">
       <h4 className="flex items-center gap-2 text-xs font-medium text-brand dark:text-brand-mid mb-3">
@@ -310,21 +309,4 @@ function CRComposer({
                 "text-xs px-2.5 py-1 rounded-full border transition-all",
                 activeTag === t
                   ? TAG_STYLES[t]
-                  : "border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-neutral-800"
-              )}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={handlePost}
-          disabled={posting || !body.trim()}
-          className="btn-primary px-5 py-1.5 text-sm"
-        >
-          {posting ? "posting…" : "post"}
-        </button>
-      </div>
-    </div>
-  );
-}
+                  : "border-black/10
