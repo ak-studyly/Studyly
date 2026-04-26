@@ -4,16 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Megaphone, MessageCircle, Pin, Paperclip, CalendarDays, Settings2, Edit3 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import { AuthProvider } from "@/components/layout/AuthProvider";
+import { AuthProvider, useAuth } from "@/components/layout/AuthProvider";
+import { createClient } from "@/lib/supabase/client";
 import Chat from "@/components/public/Chat";
 import {
   cn, formatPostTime, SOURCE_TAG_LABELS, SOURCE_TAG_STYLES, DATE_TYPE_STYLES,
 } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import type { College, Announcement, ImportantDate } from "@/types";
-import { Edit3 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { useAuth } from "@/components/layout/AuthProvider";
 
 type Tab = "announcements" | "discussions";
 
@@ -49,9 +47,7 @@ export default function ClassroomClient({
 
         <div className="max-w-5xl mx-auto px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-5">
 
-          {/* Main */}
           <main className="flex flex-col gap-0">
-            {/* Classroom header */}
             <div className="card p-4 mb-4 flex items-center justify-between gap-3 flex-wrap">
               <div>
                 <h1 className="font-serif text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -70,7 +66,6 @@ export default function ClassroomClient({
               </button>
             </div>
 
-            {/* Tabs */}
             <div className="flex border-b border-black/8 dark:border-white/8 mb-4">
               {([
                 { id: "announcements" as Tab, label: "announcements", icon: <Megaphone size={14} /> },
@@ -92,7 +87,6 @@ export default function ClassroomClient({
               ))}
             </div>
 
-            {/* Announcements tab */}
             {tab === "announcements" && (
               <div className="flex flex-col gap-3">
                 <CRComposer
@@ -119,7 +113,6 @@ export default function ClassroomClient({
               </div>
             )}
 
-            {/* Discussions tab */}
             {tab === "discussions" && (
               <div className="card overflow-hidden relative flex flex-col" style={{ height: "calc(100vh - 260px)", minHeight: "520px" }}>
                 <Chat
@@ -130,10 +123,9 @@ export default function ClassroomClient({
                 />
               </div>
             )}
+          </main>
 
-          {/* Right sidebar */}
           <aside className="flex flex-col gap-4">
-            {/* Upcoming dates */}
             <div className="card p-4">
               <div className="flex items-center gap-2 mb-3">
                 <CalendarDays size={14} className="text-brand dark:text-brand-mid" />
@@ -164,7 +156,6 @@ export default function ClassroomClient({
               )}
             </div>
 
-            {/* Info card */}
             <div className="card p-4">
               <p className="text-xs font-medium text-gray-400 dark:text-gray-600 uppercase tracking-wider mb-2">about</p>
               <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
@@ -260,8 +251,8 @@ function CRComposer({
   const SOURCE_TAGS = ["Principal", "Dean", "College"];
   const TAG_STYLES: Record<string, string> = {
     Principal: "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-200 border-purple-300",
-    Dean:      "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200 border-blue-300",
-    College:   "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200 border-amber-300",
+    Dean: "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200 border-blue-300",
+    College: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200 border-amber-300",
   };
 
   async function handlePost() {
@@ -289,7 +280,9 @@ function CRComposer({
       <h4 className="flex items-center gap-2 text-xs font-medium text-brand dark:text-brand-mid mb-3">
         <Edit3 size={13} />
         post to section {section}
-        {isAnnouncer && <span className="text-gray-400 dark:text-gray-600 font-normal">· as announcer</span>}
+        {isAnnouncer && (
+          <span className="text-gray-400 dark:text-gray-600 font-normal">· as announcer</span>
+        )}
       </h4>
       <textarea
         className="input resize-none min-h-[68px] text-sm w-full"
@@ -309,4 +302,21 @@ function CRComposer({
                 "text-xs px-2.5 py-1 rounded-full border transition-all",
                 activeTag === t
                   ? TAG_STYLES[t]
-                  : "border-black/10
+                  : "border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-neutral-800"
+              )}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={handlePost}
+          disabled={posting || !body.trim()}
+          className="btn-primary px-5 py-1.5 text-sm"
+        >
+          {posting ? "posting…" : "post"}
+        </button>
+      </div>
+    </div>
+  );
+}
