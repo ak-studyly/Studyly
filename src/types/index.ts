@@ -38,7 +38,6 @@ export type Announcement = {
   attachment_url: string | null;
   attachment_name: string | null;
   created_at: string;
-  // joined
   author?: Pick<Profile, "id" | "full_name" | "role">;
 };
 
@@ -76,6 +75,24 @@ export type Material = {
   upvotes: number;
   approved: boolean;
   created_at: string;
+};
+
+export type Message = {
+  id: string;
+  college_id: string;
+  branch: string;
+  year: number;
+  section: string;
+  sender_name: string;
+  sender_id: string | null;
+  body: string;
+  reply_to_id: string | null;
+  reply_preview: string | null;
+  reply_sender: string | null;
+  deleted: boolean;
+  created_at: string;
+  // client-only
+  token?: string;
 };
 
 // ── UI / filter types ────────────────────────────────────────
