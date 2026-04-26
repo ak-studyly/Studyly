@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Megaphone, MessageCircle, Pin, Paperclip, CalendarDays, Settings2 } from "lucide-react";
+import { Megaphone, MessageCircle, Pin, Paperclip, CalendarDays, Settings2, Edit3 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { AuthProvider } from "@/components/layout/AuthProvider";
 import Chat from "@/components/public/Chat";
