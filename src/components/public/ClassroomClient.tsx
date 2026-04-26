@@ -11,6 +11,9 @@ import {
 } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import type { College, Announcement, ImportantDate } from "@/types";
+import { Edit3 } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/components/layout/AuthProvider";
 
 type Tab = "announcements" | "discussions";
 
@@ -92,6 +95,12 @@ export default function ClassroomClient({
             {/* Announcements tab */}
             {tab === "announcements" && (
               <div className="flex flex-col gap-3">
+                <CRComposer
+                  collegeId={college.id}
+                  branch={branch}
+                  year={year}
+                  section={section}
+                />
                 {initialAnnouncements.length === 0 ? (
                   <div className="card p-10 text-center">
                     <Megaphone size={28} className="text-gray-300 dark:text-gray-700 mx-auto mb-3" />
@@ -112,7 +121,7 @@ export default function ClassroomClient({
 
             {/* Discussions tab */}
             {tab === "discussions" && (
-              <div className="card overflow-hidden relative" style={{ height: "calc(100vh - 280px)", minHeight: "480px" }}>
+              <div className="card overflow-hidden relative flex flex-col" style={{ height: "calc(100vh - 260px)", minHeight: "520px" }}>
                 <Chat
                   collegeId={college.id}
                   branch={branch}
@@ -121,7 +130,6 @@ export default function ClassroomClient({
                 />
               </div>
             )}
-          </main>
 
           {/* Right sidebar */}
           <aside className="flex flex-col gap-4">
@@ -218,6 +226,105 @@ function AnnouncementCard({ announcement: a }: { announcement: Announcement }) {
           {a.attachment_name ?? "attachment"}
         </a>
       )}
+    </div>
+  );
+}
+
+function CRComposer({
+  collegeId, branch, year, section,
+}: {
+  collegeId: string;
+  branch: string;
+  year: number;
+  section: string;
+}) {
+  const { profile } = useAuth();
+  const supabase = createClient();
+  const router = useRouter();
+
+  const isCR = profile?.role === "cr" &&
+    profile.college_id === collegeId &&
+    profile.branch === branch &&
+    profile.year === year &&
+    profile.section === section;
+
+  const isAnnouncer = profile?.role === "announcer" &&
+    profile.college_id === collegeId &&
+    profile.branch === branch &&
+    profile.year === year &&
+    profile.section === section;
+
+  if (!isCR && !isAnnouncer) return null;
+
+  const [body, setBody] = useState("");
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [posting, setPosting] = useState(false);
+
+  const SOURCE_TAGS = ["Principal", "Dean", "College"];
+  const TAG_STYLES: Record<string, string> = {
+    Principal: "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-200 border-purple-300",
+    Dean:      "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200 border-blue-300",
+    College:   "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200 border-amber-300",
+  };
+
+  async function handlePost() {
+    if (!body.trim() || !profile) return;
+    setPosting(true);
+    await supabase.from("announcements").insert({
+      college_id: collegeId,
+      branch,
+      year,
+      section,
+      author_id: profile.id,
+      body: body.trim(),
+      source_tag: activeTag?.toLowerCase() ?? (isCR ? "cr" : "announcer"),
+    });
+    setPosting(false);
+    setBody("");
+    setActiveTag(null);
+    router.refresh();
+  }
+
+  return (
+    <div className="card p-4 border-brand-mid dark:border-brand-mid">
+      <h4 className="flex items-center gap-2 text-xs font-medium text-brand dark:text-brand-mid mb-3">
+        <Edit3 size={13} />
+        post to section {section}
+        {isAnnouncer && <span className="text-gray-400 dark:text-gray-600 font-normal">· as announcer</span>}
+      </h4>
+      <textarea
+        className="input resize-none min-h-[68px] text-sm w-full"
+        placeholder="Share an announcement with your section…"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+      />
+      <div className="flex items-center justify-between mt-3 flex-wrap gap-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-xs text-gray-400 dark:text-gray-600">tag source:</span>
+          {SOURCE_TAGS.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setActiveTag(activeTag === t ? null : t)}
+              className={cn(
+                "text-xs px-2.5 py-1 rounded-full border transition-all",
+                activeTag === t
+                  ? TAG_STYLES[t]
+                  : "border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-neutral-800"
+              )}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={handlePost}
+          disabled={posting || !body.trim()}
+          className="btn-primary px-5 py-1.5 text-sm"
+        >
+          {posting ? "posting…" : "post"}
+        </button>
+      </div>
     </div>
   );
 }
