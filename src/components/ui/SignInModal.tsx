@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { useAuth } from "@/components/layout/AuthProvider";
-import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type Props = { open: boolean; onClose: () => void };
 
 export default function SignInModal({ open, onClose }: Props) {
   const { signIn } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +25,8 @@ export default function SignInModal({ open, onClose }: Props) {
     setLoading(false);
     if (error) { setError(error); return; }
     onClose();
+    // Small delay to let auth state propagate, then refresh
+    setTimeout(() => router.refresh(), 300);
   }
 
   return (
@@ -48,9 +51,7 @@ export default function SignInModal({ open, onClose }: Props) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">
-              email
-            </label>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">email</label>
             <input
               type="email"
               className="input"
@@ -61,9 +62,7 @@ export default function SignInModal({ open, onClose }: Props) {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">
-              password
-            </label>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">password</label>
             <input
               type="password"
               className="input"
@@ -80,11 +79,7 @@ export default function SignInModal({ open, onClose }: Props) {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary w-full mt-1"
-          >
+          <button type="submit" disabled={loading} className="btn-primary w-full mt-1">
             {loading ? "signing in…" : "sign in"}
           </button>
         </form>
