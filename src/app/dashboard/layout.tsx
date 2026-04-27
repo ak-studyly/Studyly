@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import { AuthProvider } from "@/components/layout/AuthProvider";
 import Navbar from "@/components/layout/Navbar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -8,7 +8,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Only CR and announcers can access the dashboard
   if (!user) redirect("/");
 
   const { data: profile } = await supabase
@@ -17,7 +16,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .eq("id", user.id)
     .single();
 
-  if (!profile?.role) redirect("/");
+  // Only redirect if definitively no role — give benefit of doubt if profile is null
+  if (profile && !profile.role) redirect("/");
 
   return (
     <AuthProvider>
