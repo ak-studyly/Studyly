@@ -166,7 +166,6 @@ export default function ClassroomClient({
 
         </div>
       </div>
-    </AuthProvider>
   );
 }
 
