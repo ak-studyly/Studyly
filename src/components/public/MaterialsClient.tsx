@@ -211,9 +211,7 @@ export default function MaterialsClient({ colleges }: Props) {
         open={addCollegeOpen} 
         onClose={() => setAddCollegeOpen(false)} 
       />
-    </>
-  );
-}
+);
 
 function MaterialCard({ material: m }: { material: Material }) {
   return (
