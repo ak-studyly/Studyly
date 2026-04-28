@@ -75,7 +75,6 @@ export default function ClassroomEntry({ colleges }: Props) {
   const canGo = !!collegeId && !!branch && !!year && !!section;
 
   return (
-    <AuthProvider>
       <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
         <Navbar />
         <div className="max-w-lg mx-auto px-6 py-16">
@@ -131,6 +130,5 @@ export default function ClassroomEntry({ colleges }: Props) {
           </p>
         </div>
       </div>
-    </AuthProvider>
   );
 }
