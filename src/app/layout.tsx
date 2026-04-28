@@ -7,11 +7,17 @@ export const metadata: Metadata = {
   description: "Access and share study materials. Get announcements from your CR. All in one place.",
 };
 
+import { AuthProvider } from "@/components/layout/AuthProvider";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
