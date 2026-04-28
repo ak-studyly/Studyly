@@ -21,12 +21,12 @@ export default function SignInModal({ open, onClose }: Props) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const result = await signIn(email, password);
-    console.log("sign in result:", result);
+    const { error } = await signIn(email, password);
     setLoading(false);
-    if (result.error) { setError(result.error); return; }
+    if (error) { setError(error); return; }
     onClose();
-    setTimeout(() => window.location.href = "/dashboard", 1000);
+    // Small delay to let auth state propagate, then refresh
+    setTimeout(() => router.refresh(), 300);
   }
 
   return (
