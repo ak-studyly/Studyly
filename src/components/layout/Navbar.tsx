@@ -178,7 +178,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <SignInModal open={signInOpen} onClose={() => { setSignInOpen(false); router.refresh(); }} />
+      <SignInModal open={signInOpen} onClose={() => setSignInOpen(false)} />
     </>
   );
 }
