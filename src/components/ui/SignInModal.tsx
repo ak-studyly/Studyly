@@ -21,11 +21,11 @@ export default function SignInModal({ open, onClose }: Props) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error } = await signIn(email, password);
+    const result = await signIn(email, password);
+    console.log("sign in result:", result);
     setLoading(false);
-    if (error) { setError(error); return; }
+    if (result.error) { setError(result.error); return; }
     onClose();
-    // Small delay to let auth state propagate, then refresh
     setTimeout(() => window.location.href = "/dashboard", 1000);
   }
 
