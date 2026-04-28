@@ -1,24 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Star, Download, Search, SlidersHorizontal } from "lucide-react";
+import { Star, Download, Search, SlidersHorizontal, PlusCircle } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import { AuthProvider } from "@/components/layout/AuthProvider";
 import AddCollegeModal from "@/components/ui/AddCollegeModal";
 import { createClient } from "@/lib/supabase/client";
 import {
   cn, BRANCHES, YEARS, MATERIAL_TYPE_LABELS, MATERIAL_TYPE_STYLES, formatPostTime,
 } from "@/lib/utils";
 import type { College, Material, MaterialType } from "@/types";
-import { PlusCircle } from "lucide-react";
 
 const ALL_TYPES: { value: MaterialType | "all"; label: string }[] = [
-  { value: "all",       label: "all" },
-  { value: "notes",     label: "notes" },
-  { value: "past_paper",label: "past paper" },
-  { value: "slides",    label: "slides" },
-  { value: "summary",   label: "summary" },
+  { value: "all",        label: "all" },
+  { value: "notes",      label: "notes" },
+  { value: "past_paper", label: "past paper" },
+  { value: "slides",     label: "slides" },
+  { value: "summary",    label: "summary" },
 ];
 
 type Props = { colleges: College[] };
@@ -28,9 +26,9 @@ export default function MaterialsClient({ colleges }: Props) {
   const supabase = createClient();
 
   const [collegeId, setCollegeId]   = useState("");
-  const [branch, setBranch]         = useState("");
-  const [year, setYear]             = useState("");
-  const [subject, setSubject]       = useState("");
+  const [branch, setBranch]          = useState("");
+  const [year, setYear]              = useState("");
+  const [subject, setSubject]        = useState("");
   const [typeFilter, setTypeFilter] = useState<MaterialType | "all">("all");
   const [materials, setMaterials]   = useState<Material[]>([]);
   const [loading, setLoading]       = useState(false);
@@ -63,6 +61,7 @@ export default function MaterialsClient({ colleges }: Props) {
   }
 
   return (
+    <>
       <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
         <Navbar />
 
@@ -79,7 +78,6 @@ export default function MaterialsClient({ colleges }: Props) {
 
           {/* Search card */}
           <div className="card p-5 mb-6">
-            {/* Progress dots */}
             <div className="flex items-center gap-2 mb-4">
               <div className={cn("w-2 h-2 rounded-full transition-colors", step1Done ? "bg-brand dark:bg-brand-mid" : "bg-gray-200 dark:bg-neutral-700")} />
               <span className={cn("text-xs", step1Done ? "text-gray-700 dark:text-gray-300 font-medium" : "text-gray-400")}>college</span>
@@ -89,7 +87,6 @@ export default function MaterialsClient({ colleges }: Props) {
               <span className={cn("text-xs text-gray-400")}>subject (optional)</span>
             </div>
 
-            {/* Row 1 — college */}
             <div className="flex gap-2 mb-2">
               <select
                 className="select flex-1"
@@ -103,7 +100,6 @@ export default function MaterialsClient({ colleges }: Props) {
               </select>
             </div>
 
-            {/* Row 2 — branch + year, revealed after college */}
             <div className={cn(
               "flex gap-2 flex-wrap transition-all duration-300 overflow-hidden",
               step1Done ? "max-h-40 opacity-100 mb-2" : "max-h-0 opacity-0"
@@ -118,7 +114,6 @@ export default function MaterialsClient({ colleges }: Props) {
               </select>
             </div>
 
-            {/* Row 3 — subject + search, revealed after branch+year */}
             <div className={cn(
               "flex gap-2 transition-all duration-300 overflow-hidden",
               step2Done ? "max-h-20 opacity-100 mb-2" : "max-h-0 opacity-0"
@@ -145,7 +140,6 @@ export default function MaterialsClient({ colleges }: Props) {
             </button>
           </div>
 
-          {/* Type filter — shown after search */}
           {searched && (
             <div className="flex items-center gap-2 mb-4 flex-wrap">
               <SlidersHorizontal size={14} className="text-gray-400" />
@@ -166,7 +160,6 @@ export default function MaterialsClient({ colleges }: Props) {
             </div>
           )}
 
-          {/* Results */}
           {searched && !loading && (
             <>
               {materials.length === 0 ? (
@@ -193,7 +186,6 @@ export default function MaterialsClient({ colleges }: Props) {
             </>
           )}
 
-          {/* Upload CTA — always visible */}
           {!searched && (
             <div className="border border-dashed border-black/10 dark:border-white/10 rounded-xl p-5 flex items-center justify-between flex-wrap gap-3 bg-white dark:bg-neutral-900">
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -207,11 +199,14 @@ export default function MaterialsClient({ colleges }: Props) {
           )}
         </div>
       </div>
+      
       <AddCollegeModal 
         open={addCollegeOpen} 
         onClose={() => setAddCollegeOpen(false)} 
       />
-);
+    </>
+  );
+}
 
 function MaterialCard({ material: m }: { material: Material }) {
   return (
