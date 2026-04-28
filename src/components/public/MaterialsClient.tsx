@@ -63,7 +63,6 @@ export default function MaterialsClient({ colleges }: Props) {
   }
 
   return (
-    <AuthProvider>
       <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
         <Navbar />
 
@@ -209,7 +208,6 @@ export default function MaterialsClient({ colleges }: Props) {
         </div>
       </div>
       <AddCollegeModal open={addCollegeOpen} onClose={() => setAddCollegeOpen(false)} />
-    </AuthProvider>
   );
 }
 
