@@ -16,9 +16,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .eq("id", user.id)
     .single();
 
-  // Only redirect if definitively no role — give benefit of doubt if profile is null
-  if (profile && !profile.role) redirect("/");
-
   return (
     <AuthProvider>
       <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
