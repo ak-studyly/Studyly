@@ -211,6 +211,7 @@ export default function MaterialsClient({ colleges }: Props) {
         open={addCollegeOpen} 
         onClose={() => setAddCollegeOpen(false)} 
       />
+    </>
   );
 }
 
