@@ -207,7 +207,10 @@ export default function MaterialsClient({ colleges }: Props) {
           )}
         </div>
       </div>
-      <AddCollegeModal open={addCollegeOpen} onClose={() => setAddCollegeOpen(false)} />
+      <AddCollegeModal 
+        open={addCollegeOpen} 
+        onClose={() => setAddCollegeOpen(false)} 
+      />
   );
 }
 
