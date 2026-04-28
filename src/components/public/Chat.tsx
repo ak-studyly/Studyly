@@ -79,32 +79,38 @@ export default function Chat({ collegeId, branch, year, section }: Props) {
   // Realtime subscription
   useEffect(() => {
     const channel = supabase
-      .channel(`chat:${collegeId}:${branch}:${year}:${section}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "messages",
-          filter: `college_id=eq.${collegeId}`,
-        },
-        (payload) => {
-          if (payload.eventType === "INSERT") {
-            setMessages((prev) => {
-              if (prev.find((m) => m.id === (payload.new as Message).id)) return prev;
-              return [...prev, payload.new as Message];
-            });
-            setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
-          }
-          if (payload.eventType === "UPDATE") {
-            setMessages((prev) =>
-              prev.map((m) => m.id === (payload.new as Message).id ? payload.new as Message : m)
-            );
-          }
-        }
-      )
-      .subscribe();
+  .channel(`chat:${collegeId}:${branch}:${year}:${section}`)
+  .on(
+    "postgres_changes",
+    {
+      event: "*",
+      schema: "public",
+      table: "messages",
+    },
+    (payload) => {
+      const msg = payload.new as Message;
+      if (
+        msg.college_id !== collegeId ||
+        msg.branch !== branch ||
+        msg.year !== year ||
+        msg.section !== section
+      ) return;
 
+      if (payload.eventType === "INSERT") {
+        setMessages((prev) => {
+          if (prev.find((m) => m.id === msg.id)) return prev;
+          return [...prev, msg];
+        });
+        setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+      }
+      if (payload.eventType === "UPDATE") {
+        setMessages((prev) =>
+          prev.map((m) => m.id === msg.id ? msg : m)
+        );
+      }
+    }
+  )
+  .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [collegeId, branch, year, section]);
 
