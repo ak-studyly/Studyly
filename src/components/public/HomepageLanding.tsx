@@ -9,7 +9,6 @@ export default function HomepageLanding() {
   const router = useRouter();
 
   return (
-    <AuthProvider>
       <div className="min-h-screen bg-white dark:bg-neutral-950 flex flex-col">
         <Navbar />
 
@@ -123,6 +122,5 @@ export default function HomepageLanding() {
           </p>
         </footer>
       </div>
-    </AuthProvider>
   );
 }
