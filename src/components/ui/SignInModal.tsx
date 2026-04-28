@@ -26,7 +26,7 @@ export default function SignInModal({ open, onClose }: Props) {
     if (error) { setError(error); return; }
     onClose();
     // Small delay to let auth state propagate, then refresh
-    setTimeout(() => window.location.reload(), 300);
+    setTimeout(() => window.location.href = "/dashboard", 1000);
   }
 
   return (
