@@ -41,7 +41,6 @@ export default function ClassroomClient({
   const yearSuffix = ["st","nd","rd","th"][Math.min(year - 1, 3)];
 
   return (
-    <AuthProvider>
       <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
         <Navbar />
 
