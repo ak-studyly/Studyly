@@ -22,14 +22,16 @@ export default function SignInModal({ open, onClose }: Props) {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     
-    console.log("direct sign in result:", error);
-    
+    console.log("sign in error:", error);
+    console.log("redirecting to dashboard...");
+
     if (error) {
       setError(error.message);
       setLoading(false);
       return;
     }
-    
+
+    console.log("about to redirect");
     window.location.replace("/dashboard");
   }
 
