@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
-import { AuthProvider } from "@/components/layout/AuthProvider";
 import { BRANCHES, YEARS, SECTIONS, cn } from "@/lib/utils";
 import type { College } from "@/types";
 
@@ -64,11 +63,9 @@ export default function ClassroomEntry({ colleges }: Props) {
 
   if (!showSetup) {
     return (
-      <AuthProvider>
         <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 flex items-center justify-center">
           <div className="text-sm text-gray-400 dark:text-gray-600">loading your classroom…</div>
         </div>
-      </AuthProvider>
     );
   }
 
