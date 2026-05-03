@@ -30,7 +30,7 @@ export default function SignInModal({ open, onClose }: Props) {
       return;
     }
     
-    window.location.href = "/dashboard";
+    window.location.replace("/dashboard");
   }
 
   return (
