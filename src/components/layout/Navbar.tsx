@@ -8,6 +8,7 @@ import { useAuth } from "./AuthProvider";
 import { useTheme } from "./ThemeProvider";
 import { cn } from "@/lib/utils";
 import SignInModal from "@/components/ui/SignInModal";
+import { createClient } from "@/lib/supabase/client";
 
 type NavTab = { label: string; href: string };
 
@@ -154,7 +155,8 @@ export default function Navbar() {
                   <button
                     onClick={async () => {
                       setDdOpen(false);
-                      await signOut();
+                      const supabase = createClient();
+                      await supabase.auth.signOut({ scope: "global" });
                       window.location.href = "/";
                     }}
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
