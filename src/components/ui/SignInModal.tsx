@@ -2,14 +2,11 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
-import { useAuth } from "@/components/layout/AuthProvider";
-import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 type Props = { open: boolean; onClose: () => void };
 
 export default function SignInModal({ open, onClose }: Props) {
-  const { signIn } = useAuth();
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -21,12 +18,19 @@ export default function SignInModal({ open, onClose }: Props) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error } = await signIn(email, password);
-    setLoading(false);
-    if (error) { setError(error); return; }
-    onClose();
-    // Small delay to let auth state propagate, then refresh
-    setTimeout(() => router.refresh(), 300);
+    
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    
+    console.log("direct sign in result:", error);
+    
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+      return;
+    }
+    
+    window.location.href = "/dashboard";
   }
 
   return (
