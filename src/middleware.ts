@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet: any[]) {
+        setAll(cookiesToSet: { name: string; value: string; options?: object }[]) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
@@ -25,7 +25,6 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session — do not remove this
   await supabase.auth.getUser();
 
   return supabaseResponse;
